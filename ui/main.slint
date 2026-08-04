@@ -1,0 +1,227 @@
+import { HorizontalBox, Palette, ScrollView, TextEdit, VerticalBox } from "std-widgets.slint";
+
+// ponytail: paleta Capy (estilo VS-Capy-UI), dark + light; toggle continua no Palette.color-scheme
+export global Theme {
+    in-out property <ColorScheme> color-scheme: Palette.color-scheme;
+    out property <bool> dark: self.color-scheme == ColorScheme.dark;
+    out property <brush> background: self.dark ? #1c1d21 : #f7f9f9;
+    out property <brush> card: self.dark ? #26282e : #ffffff;
+    out property <brush> foreground: self.dark ? #f7f9f9 : #1c1d21;
+    out property <brush> muted: self.dark ? #8bb4d8 : #5b6b7b;
+    out property <brush> border: self.dark ? #36383f : #d5dae0;
+    out property <brush> hover: self.dark ? #2f3238 : #eceff3;
+    out property <brush> accent: self.dark ? #1e80c7 : #1a6fae;
+    out property <brush> success: #00ba7c;
+    out property <brush> error: #e74c3c;
+}
+
+component IconButton inherits Rectangle {
+    in property <image> icon;
+    in property <string> tip;
+    callback clicked;
+
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: touch.has-hover ? Theme.hover : transparent;
+    accessible-role: button;
+    accessible-label: root.tip;
+    animate background { duration: 150ms; }
+
+    touch := TouchArea {
+        clicked => { root.clicked(); }
+    }
+
+    Image {
+        source: root.icon;
+        width: 16px;
+        height: 16px;
+        colorize: Theme.foreground;
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+    }
+}
+
+component OutputPane {
+    in property <string> text;
+    in property <string> status;
+    in property <image> action-icon;
+    in property <string> action-tip;
+    callback action;
+
+    VerticalBox {
+        spacing: 4px;
+        Text {
+            text: "ENV";
+            font-size: 13px;
+            font-weight: 600;
+            color: Theme.muted;
+        }
+        // ponytail: TextInput builtin sem focus ring + read-only mantem selecao
+        Rectangle {
+            background: Theme.card;
+            border-radius: 8px;
+            border-width: 1px;
+            border-color: Theme.border;
+            clip: true;
+            horizontal-stretch: 1;
+            vertical-stretch: 1;
+
+            scroll := ScrollView {
+                x: 12px;
+                y: 12px;
+                width: parent.width - 24px;
+                height: parent.height - 24px;
+                viewport-width: self.visible-width;
+                // ponytail: viewport = tamanho do conteudo; max(visible,preferred) centralizava o texto
+                viewport-height: output-text.preferred-height;
+
+                // ponytail: Text nativo = sem caret/foco/edicao, botao Copiar cobre a copia
+                output-text := Text {
+                    text: root.text;
+                    font-family: "monospace";
+                    font-size: 13px;
+                    color: Theme.foreground;
+                    wrap: word-wrap;
+                    width: scroll.visible-width;
+                }
+            }
+        }
+        HorizontalBox {
+            spacing: 4px;
+            Rectangle { } // spacer: empurra a ação para a direita
+            Text {
+                text: root.status;
+                font-size: 12px;
+                color: Theme.muted;
+                vertical-alignment: center;
+                visible: root.status != "";
+            }
+            IconButton {
+                icon: root.action-icon;
+                tip: root.action-tip;
+                clicked => { root.action(); }
+            }
+        }
+    }
+}
+
+component Pane {
+    in property <string> label;
+    in property <string> placeholder;
+    in-out property <string> text;
+    in property <bool> read-only;
+    in property <image> action-icon;
+    in property <string> action-tip;
+    in property <image> upload-icon;
+    in property <string> upload-tip;
+    in property <string> status;
+    callback text-changed(string);
+    callback action;
+    callback upload-requested;
+
+    VerticalBox {
+        spacing: 4px;
+        Text {
+            text: root.label;
+            font-size: 13px;
+            font-weight: 600;
+            color: Theme.muted;
+        }
+        // ponytail: TextEdit mantido (placeholder/scroll nativos); cores internas seguem o estilo
+        TextEdit {
+            placeholder-text: root.placeholder;
+            read-only: root.read-only;
+            text <=> root.text;
+            edited(text) => { root.text-changed(text); }
+            font-family: "monospace";
+            font-size: 13px;
+        }
+        HorizontalBox {
+            spacing: 4px;
+            Rectangle { } // spacer: empurra a ação para a direita
+            Text {
+                text: root.status;
+                font-size: 12px;
+                color: Theme.muted;
+                vertical-alignment: center;
+                visible: root.status != "";
+            }
+            IconButton {
+                icon: root.upload-icon;
+                tip: root.upload-tip;
+                clicked => { root.upload-requested(); }
+            }
+            IconButton {
+                icon: root.action-icon;
+                tip: root.action-tip;
+                clicked => { root.action(); }
+            }
+        }
+    }
+}
+
+export component MainWindow inherits Window {
+    title: "AppsettingsToEnv";
+    width: 960px;
+    height: 640px;
+    background: Theme.background;
+
+    in property <string> output;
+    in-out property <string> input;
+    in property <string> copy-status;
+    in property <string> upload-status;
+    callback input-changed(string);
+    callback copy-requested;
+    callback clear-requested;
+    callback upload-requested;
+
+    VerticalBox {
+        spacing: 12px;
+        padding: 16px;
+
+        // Painéis
+        HorizontalBox {
+            spacing: 12px;
+
+            Pane {
+                label: "appsettings.json";
+                placeholder: "Cole seu appsettings.json aqui...";
+                text <=> root.input;
+                read-only: false;
+                action-icon: @image-url("icons/trash.svg");
+                action-tip: "Limpar";
+                upload-icon: @image-url("icons/upload.svg");
+                upload-tip: "Carregar JSON";
+                status: root.upload-status;
+                text-changed(text) => { root.input-changed(text); }
+                action => { root.clear-requested(); }
+                upload-requested => { root.upload-requested(); }
+            }
+
+            OutputPane {
+                text: root.output;
+                status: root.copy-status;
+                action-icon: @image-url("icons/copy.svg");
+                action-tip: "Copiar";
+                action => { root.copy-requested(); }
+            }
+        }
+    }
+
+    // ponytail: toggle sol/lua no canto, sem tooltip (Slint nao tem declarativo);
+    // icone mostra o destino: dark ativo -> sol (vai p/ light), light -> lua
+    IconButton {
+        x: root.width - 44px;
+        y: 16px;
+        icon: Palette.color-scheme == ColorScheme.dark
+            ? @image-url("icons/sun.svg")
+            : @image-url("icons/moon.svg");
+        tip: "Alternar tema";
+        clicked => {
+            Palette.color-scheme = Palette.color-scheme == ColorScheme.dark
+                ? ColorScheme.light
+                : ColorScheme.dark;
+        }
+    }
+}
