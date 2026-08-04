@@ -17,9 +17,8 @@ fn flatten(value: &serde_json::Value, prefix: &str, out: &mut Vec<String>) {
                 flatten(v, &format!("{prefix}__{i}"), out);
             }
         }
-        serde_json::Value::Null => {} // null nao pode ser armazenado em config
+        serde_json::Value::Null => {} // null can't be stored in config
         scalar => {
-            // ponytail: valores crus, sem desescapar
             let value = scalar.as_str().map(String::from).unwrap_or_else(|| scalar.to_string());
             out.push(format!("{prefix}={value}"));
         }
@@ -33,7 +32,7 @@ fn convert(input: &str) -> String {
             flatten(&root, "", &mut out);
             out.join("\n")
         }
-        Err(e) => e.to_string(), // painel direito mostra o erro do parser
+        Err(e) => e.to_string(),
     }
 }
 
@@ -73,7 +72,7 @@ fn main() -> Result<(), slint::PlatformError> {
     });
 
     let handle = ui.as_weak();
-    // ponytail: clipboard persistente, senha o X11 manager nao ve o conteudo
+    // Persistent clipboard: a dropped Clipboard is never seen by the X11 manager.
     let mut clipboard = arboard::Clipboard::new();
     ui.on_copy_requested(move || {
         let Some(ui) = handle.upgrade() else { return };
@@ -98,7 +97,7 @@ fn main() -> Result<(), slint::PlatformError> {
     });
 
     let handle = ui.as_weak();
-    // ponytail: file picker bloqueia a thread -> roda em thread propria, volta via event loop
+    // The file dialog blocks its thread, so it runs on a worker thread.
     ui.on_upload_requested(move || {
         let handle = handle.clone();
         std::thread::spawn(move || {
@@ -110,7 +109,7 @@ fn main() -> Result<(), slint::PlatformError> {
                     Ok(c) => (c, String::new()),
                     Err(e) => (String::new(), format!("Erro ao ler arquivo: {e}")),
                 },
-                None => return, // cancelado pelo usuario
+                None => return, // user cancelled
             };
             let _ = slint::invoke_from_event_loop(move || {
                 if let Some(ui) = handle.upgrade() {

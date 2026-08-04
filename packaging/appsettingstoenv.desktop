@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=AppsettingsToEnv
+Comment=Converte appsettings.json em variáveis de ambiente
+Exec=appsettingstoenv
+Icon=appsettingstoenv
+Terminal=false
+Categories=Development;Utility;

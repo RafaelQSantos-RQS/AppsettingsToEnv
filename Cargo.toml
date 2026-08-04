@@ -2,6 +2,8 @@
 name = "appsettingstoenv"
 version = "0.0.1"
 edition = "2024"
+description = "Converte appsettings.json em variáveis de ambiente (KEY=value) para Docker"
+license = "MIT"
 
 [dependencies]
 arboard = "3.6.1"
@@ -11,3 +13,15 @@ slint = "1.17.1"
 
 [build-dependencies]
 slint-build = "1.17.1"
+
+[package.metadata.deb]
+maintainer = "Rafael Queiroz Santos <rafaelqsantos33@gmail.com>"
+copyright = "2026, Rafael Queiroz Santos <rafaelqsantos33@gmail.com>"
+section = "utils"
+priority = "optional"
+depends = "$auto, libx11-6, libxkbcommon0, libwayland-client0, libgl1"
+assets = [
+    ["target/release/appsettingstoenv", "usr/bin/", "755"],
+    ["packaging/appsettingstoenv.desktop", "usr/share/applications/", "644"],
+    ["packaging/appsettingstoenv.svg", "usr/share/icons/hicolor/scalable/apps/", "644"],
+]
