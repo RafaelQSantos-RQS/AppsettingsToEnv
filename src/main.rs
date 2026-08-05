@@ -170,5 +170,19 @@ fn main() -> Result<(), slint::PlatformError> {
         });
     });
 
+    // Opens the repo page in the default browser; xdg-open detaches immediately.
+    ui.on_open_github(move || {
+        let _ = std::process::Command::new("xdg-open")
+            .arg("https://github.com/RafaelQSantos-RQS/AppsettingsToEnv")
+            .spawn();
+    });
+
+    // Opens the LinkedIn profile in the default browser; xdg-open detaches immediately.
+    ui.on_open_linkedin(move || {
+        let _ = std::process::Command::new("xdg-open")
+            .arg("https://www.linkedin.com/in/rafael-queiroz-santos")
+            .spawn();
+    });
+
     ui.run()
 }

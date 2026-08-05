@@ -193,6 +193,8 @@ export component MainWindow inherits Window {
     callback save-requested;
     callback clear-requested;
     callback upload-requested;
+    callback open-github;
+    callback open-linkedin;
 
     VerticalBox {
         spacing: 12px;
@@ -244,4 +246,108 @@ export component MainWindow inherits Window {
                 : ColorScheme.dark;
         }
     }
+    IconButton {
+        x: root.width - 78px;
+        y: 16px;
+        icon: @image-url("icons/info.svg");
+        tip: "About";
+        clicked => { about-popup.show(); }
+    }
+
+    about-popup := PopupWindow {
+        x: (root.width - 420px) / 2;
+        y: (root.height - 260px) / 2;
+        width: 420px;
+        height: 260px;
+        close-policy: close-on-click-outside;
+
+        Rectangle {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            border-width: 1px;
+            border-color: Theme.border;
+            background: Theme.dark ? #151311 : Theme.card;
+
+            VerticalLayout {
+                spacing: 8px;
+                padding: 16px;
+
+                Text {
+                    text: "Appsettings To Env";
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: Theme.foreground;
+                }
+                Text {
+                    text: "Convert appsettings.json to environment variables for Docker.";
+                    font-size: 14px;
+                    color: Theme.muted;
+                    wrap: word-wrap;
+                }
+                Rectangle { height: 1px; background: Theme.border; }
+                Text {
+                    text: "Author: RafaelQSantos-RQS";
+                    font-size: 13px;
+                    color: Theme.foreground;
+                }
+                // Social icons open the pages; follow the theme
+                HorizontalBox {
+                    alignment: center;
+                    spacing: 12px;
+                    Rectangle {
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 6px;
+                        background: touch.has-hover ? Theme.hover : transparent;
+                        animate background { duration: 150ms; }
+                        touch := TouchArea {
+                            clicked => { root.open-github(); }
+                            accessible-role: button;
+                            accessible-label: "Open GitHub";
+                        }
+                        Image {
+                            source: Theme.dark
+                                ? @image-url("icons/GitHub_Invertocat_White.svg")
+                                : @image-url("icons/GitHub_Invertocat_Black.svg");
+                            width: 24px;
+                            height: 24px;
+                            x: (parent.width - self.width) / 2;
+                            y: (parent.height - self.height) / 2;
+                        }
+                    }
+                    Rectangle {
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 6px;
+                        background: touch2.has-hover ? Theme.hover : transparent;
+                        animate background { duration: 150ms; }
+                        touch2 := TouchArea {
+                            clicked => { root.open-linkedin(); }
+                            accessible-role: button;
+                            accessible-label: "Open LinkedIn";
+                        }
+                        Image {
+                            source: Theme.dark
+                                ? @image-url("icons/linkedin_white.svg")
+                                : @image-url("icons/linkedin_black.svg");
+                            width: 24px;
+                            height: 24px;
+                            x: (parent.width - self.width) / 2;
+                            y: (parent.height - self.height) / 2;
+                        }
+                    }
+                }
+            }
+            // X button in the top-right corner
+            IconButton {
+                x: parent.width - 36px;
+                y: 8px;
+                icon: @image-url("icons/x.svg");
+                tip: "Close";
+                clicked => { about-popup.close(); }
+            }
+        }
+    }
 }
+
