@@ -19,7 +19,11 @@ fn flatten(value: &serde_json::Value, prefix: &str, out: &mut Vec<String>) {
         }
         serde_json::Value::Null => {} // null can't be stored in config
         scalar => {
-            let value = scalar.as_str().map(String::from).unwrap_or_else(|| scalar.to_string());
+            // Escape line breaks so the value stays one line (valid for .env files)
+            let value = scalar
+                .as_str()
+                .map(|s| s.replace('\r', "\\r").replace('\n', "\\n").replace('\t', "\\t"))
+                .unwrap_or_else(|| scalar.to_string());
             out.push(format!("{prefix}={value}"));
         }
     }
@@ -52,6 +56,14 @@ mod tests {
         assert!(out.contains("AllowedHosts__0=a"));
         assert!(out.contains("AllowedHosts__1=b"));
         assert!(!out.contains("Feature"));
+    }
+
+    #[test]
+    fn escapes_line_breaks_and_tabs() {
+        let json = r#"{"Log": "Line 1\nLine 2\r\nLine 3\tTab", "Path": "C:\\data"}"#;
+        let out = convert(json);
+        assert!(out.contains("Log=Line 1\\nLine 2\\r\\nLine 3\\tTab"));
+        assert!(out.contains("Path=C:\\data"));
     }
 
     #[test]

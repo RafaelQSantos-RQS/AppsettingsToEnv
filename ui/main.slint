@@ -159,8 +159,13 @@ component Pane {
 
 export component MainWindow inherits Window {
     title: "AppsettingsToEnv";
-    width: 960px;
-    height: 640px;
+    // Fixed size: min == max locks the window size
+    preferred-width: 1280px;
+    preferred-height: 800px;
+    min-width: 1280px;
+    max-width: 1280px;
+    min-height: 800px;
+    max-height: 800px;
     background: Theme.background;
 
     in property <string> output;
