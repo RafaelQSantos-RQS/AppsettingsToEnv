@@ -22,7 +22,11 @@ fn flatten(value: &serde_json::Value, prefix: &str, out: &mut Vec<String>) {
             // Escape line breaks so the value stays one line (valid for .env files)
             let value = scalar
                 .as_str()
-                .map(|s| s.replace('\r', "\\r").replace('\n', "\\n").replace('\t', "\\t"))
+                .map(|s| {
+                    s.replace('\r', "\\r")
+                        .replace('\n', "\\n")
+                        .replace('\t', "\\t")
+                })
                 .unwrap_or_else(|| scalar.to_string());
             out.push(format!("{prefix}={value}"));
         }
