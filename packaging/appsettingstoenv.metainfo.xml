@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.rafaelqsantos.appsettingstoenv</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Appsettings To Env</name>
+  <summary>Convert appsettings.json to environment variables for Docker</summary>
+  <description>
+    <p>Convert appsettings.json (.NET configuration) into environment variables in KEY=value format, ready for Docker containers.</p>
+    <p>Nested keys use __ as separator, arrays are indexed (Key__0, Key__1, ...), and null values are ignored.</p>
+    <p>Features: real-time conversion, clipboard copy, save as .env, load from file, light and dark themes.</p>
+  </description>
+  <launchable type="desktop-id">appsettingstoenv.desktop</launchable>
+  <url type="homepage">https://github.com/RafaelQSantos-RQS/AppsettingsToEnv</url>
+  <releases>
+    <release version="0.0.1" date="2026-08-05"/>
+  </releases>
+  <developer id="io.github.rafaelqsantos">
+    <name>Rafael Queiroz Santos</name>
+    <url>https://github.com/RafaelQSantos-RQS</url>
+  </developer>
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="sex-homosexuality">none</content_attribute>
+    <content_attribute id="sex-prostitution">none</content_attribute>
+    <content_attribute id="sex-adultery">none</content_attribute>
+    <content_attribute id="sex-appearance">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+</component>
