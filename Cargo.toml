@@ -1,6 +1,6 @@
 [package]
 name = "appsettingstoenv"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2024"
 description = "Convert appsettings.json to environment variables (KEY=value) for Docker"
 license = "MIT"
