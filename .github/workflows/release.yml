@@ -35,3 +35,4 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: target/debian/*.deb
+          generate_release_notes: true
