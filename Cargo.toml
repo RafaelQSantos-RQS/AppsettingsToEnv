@@ -2,7 +2,7 @@
 name = "appsettingstoenv"
 version = "0.0.1"
 edition = "2024"
-description = "Converte appsettings.json em variáveis de ambiente (KEY=value) para Docker"
+description = "Convert appsettings.json to environment variables (KEY=value) for Docker"
 license = "MIT"
 
 [dependencies]

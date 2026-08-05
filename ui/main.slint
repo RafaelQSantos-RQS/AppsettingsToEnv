@@ -42,9 +42,13 @@ component IconButton inherits Rectangle {
 component OutputPane {
     in property <string> text;
     in property <string> status;
+    in property <int> var-count;
     in property <image> action-icon;
     in property <string> action-tip;
+    in property <image> save-icon;
+    in property <string> save-tip;
     callback action;
+    callback save;
 
     VerticalBox {
         spacing: 4px;
@@ -85,13 +89,24 @@ component OutputPane {
         }
         HorizontalBox {
             spacing: 4px;
-            Rectangle { } // spacer: pushes the action to the right
+            Text {
+                text: root.var-count > 0 ? "\{root.var-count} variables" : "";
+                font-size: 12px;
+                color: Theme.muted;
+                vertical-alignment: center;
+            }
+            Rectangle { } // spacer: pushes the status and actions to the right
             Text {
                 text: root.status;
                 font-size: 12px;
                 color: Theme.muted;
                 vertical-alignment: center;
                 visible: root.status != "";
+            }
+            IconButton {
+                icon: root.save-icon;
+                tip: root.save-tip;
+                clicked => { root.save(); }
             }
             IconButton {
                 icon: root.action-icon;
@@ -158,7 +173,7 @@ component Pane {
 }
 
 export component MainWindow inherits Window {
-    title: "AppsettingsToEnv";
+    title: "Appsettings To Env";
     // Fixed size: min == max locks the window size
     preferred-width: 1280px;
     preferred-height: 800px;
@@ -172,8 +187,10 @@ export component MainWindow inherits Window {
     in-out property <string> input;
     in property <string> copy-status;
     in property <string> upload-status;
+    in property <int> var-count;
     callback input-changed(string);
     callback copy-requested;
+    callback save-requested;
     callback clear-requested;
     callback upload-requested;
 
@@ -186,13 +203,13 @@ export component MainWindow inherits Window {
 
             Pane {
                 label: "appsettings.json";
-                placeholder: "Cole seu appsettings.json aqui...";
+                placeholder: "Paste your appsettings.json here...";
                 text <=> root.input;
                 read-only: false;
                 action-icon: @image-url("icons/trash.svg");
-                action-tip: "Limpar";
+                action-tip: "Clear";
                 upload-icon: @image-url("icons/upload.svg");
-                upload-tip: "Carregar JSON";
+                upload-tip: "Load JSON";
                 status: root.upload-status;
                 text-changed(text) => { root.input-changed(text); }
                 action => { root.clear-requested(); }
@@ -202,9 +219,13 @@ export component MainWindow inherits Window {
             OutputPane {
                 text: root.output;
                 status: root.copy-status;
+                var-count: root.var-count;
                 action-icon: @image-url("icons/copy.svg");
-                action-tip: "Copiar";
+                action-tip: "Copy";
+                save-icon: @image-url("icons/save.svg");
+                save-tip: "Save as .env";
                 action => { root.copy-requested(); }
+                save => { root.save-requested(); }
             }
         }
     }
@@ -216,7 +237,7 @@ export component MainWindow inherits Window {
         icon: Palette.color-scheme == ColorScheme.dark
             ? @image-url("icons/sun.svg")
             : @image-url("icons/moon.svg");
-        tip: "Alternar tema";
+        tip: "Toggle theme";
         clicked => {
             Palette.color-scheme = Palette.color-scheme == ColorScheme.dark
                 ? ColorScheme.light

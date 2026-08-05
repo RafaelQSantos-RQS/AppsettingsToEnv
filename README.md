@@ -1,38 +1,40 @@
-# AppsettingsToEnv
+# Appsettings To Env
 
-Converte `appsettings.json` (configuração do .NET) em variáveis de ambiente no formato `KEY=value`, pronto para usar em containers Docker.
+Converts `appsettings.json` (.NET configuration) into environment variables in `KEY=value` format, ready for Docker containers.
 
-## Uso
+## Usage
 
-Cole o JSON no painel esquerdo — a conversão acontece em tempo real no painel direito. Depois é só copiar o resultado.
+Paste the JSON into the left panel — the conversion happens in real time on the right panel. Then copy the result.
 
-- **Upload** — carrega um arquivo `.json` para substituir o conteúdo do painel esquerdo
-- **Limpar** — esvazia os dois painéis
-- **Copiar** — copia o resultado para a área de transferência
-- **Tema** — alterna entre os temas claro e escuro
+- **Upload** — loads a `.json` file to replace the left panel content
+- **Clear** — empties both panels
+- **Copy** — copies the result to the clipboard
+- **Save as .env** — saves the result to a `.env` file
+- **Theme** — toggles between light and dark themes
 
-## Regras de conversão
+## Conversion rules
 
-Segue a convenção da Microsoft para configuração por variáveis de ambiente:
+Follows the Microsoft convention for configuration via environment variables:
 
-| JSON | Resultado |
+| JSON | Result |
 |---|---|
 | `"ConnectionStrings": { "Default": "Server=db" }` | `ConnectionStrings__Default=Server=db` |
 | `"AllowedHosts": ["a", "b"]` | `AllowedHosts__0=a`<br>`AllowedHosts__1=b` |
-| `"Feature": null` | *(omitido)* |
+| `"Feature": null` | *(omitted)* |
 
-- Chaves aninhadas usam `__` como separador
-- Arrays são indexados (`Key__0`, `Key__1`, ...)
-- Valores `null` são ignorados
-- JSON inválido mostra o erro do parser no painel direito
+- Nested keys use `__` as separator
+- Arrays are indexed (`Key__0`, `Key__1`, ...)
+- `null` values are ignored
+- Invalid JSON shows the parser error in the right panel
+- Line breaks and tabs in values are escaped (`\n`, `\r`, `\t`) to keep one entry per line
 
-## Como rodar
+## How to run
 
 ```bash
 cargo run
 ```
 
-## Testes
+## Tests
 
 ```bash
 cargo test
@@ -40,5 +42,5 @@ cargo test
 
 ## Stack
 
-- **Rust** com [Slint](https://slint.dev) (UI desktop)
-- **serde_json** (parse) e **arboard** (área de transferência), **rfd** (file picker)
+- **Rust** with [Slint](https://slint.dev) (desktop UI)
+- **serde_json** (parse), **arboard** (clipboard), **rfd** (file picker)
