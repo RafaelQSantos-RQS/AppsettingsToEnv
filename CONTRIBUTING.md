@@ -23,7 +23,7 @@ The CI runs exactly these three checks, so a PR that doesn't pass them won't be 
 
 - Keep the diff small. One feature or fix per PR.
 - UI text stays in English (the whole app is in English).
-- Commit messages follow the repo's existing style: short, in Portuguese (see `git log`).
+- Commit messages follow the repo's existing style: short, in English (see `git log`).
 - New SVG icons follow the existing style (lucide-style, matching the palette).
 
 ## Reporting issues
