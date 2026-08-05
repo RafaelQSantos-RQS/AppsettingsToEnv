@@ -1,0 +1,5 @@
+Convert appsettings.json (.NET configuration) into environment variables in KEY=value format, ready for Docker containers.
+.
+Nested keys use __ as separator, arrays are indexed (Key__0, Key__1, ...), and null values are ignored. Invalid JSON shows the parser error in the right panel.
+.
+Features: real-time conversion, clipboard copy, save as .env, load from file, light and dark themes.

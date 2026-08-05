@@ -17,6 +17,7 @@ slint-build = "1.17.1"
 [package.metadata.deb]
 maintainer = "Rafael Queiroz Santos <rafaelqsantos33@gmail.com>"
 copyright = "2026, Rafael Queiroz Santos <rafaelqsantos33@gmail.com>"
+extended-description-file = "packaging/description.txt"
 section = "utils"
 priority = "optional"
 depends = "$auto, libx11-6, libxkbcommon0, libwayland-client0, libgl1"
