@@ -5,6 +5,37 @@
 
 Converts `appsettings.json` (.NET configuration) into environment variables in `KEY=value` format, ready for Docker containers.
 
+<!-- TODO: Add screenshots here (light theme, dark theme, error state) -->
+
+## Installation
+
+### cargo install
+
+```bash
+cargo install appsettingstoenv
+```
+
+### .deb package
+
+Download the latest `.deb` from [Releases](https://github.com/RafaelQSantos-RQS/AppsettingsToEnv/releases) and install:
+
+```bash
+sudo dpkg -i appsettingstoenv_*.deb
+```
+
+### AppImage
+
+Download the latest AppImage from [Releases](https://github.com/RafaelQSantos-RQS/AppsettingsToEnv/releases), make it executable, and run:
+
+```bash
+chmod +x appsettingstoenv_*.AppImage
+./appsettingstoenv_*.AppImage
+```
+
+### Flatpak
+
+_(Coming soon — build from the Flatpak manifest in `packaging/`.)_
+
 ## Usage
 
 Paste the JSON into the left panel — the conversion happens in real time on the right panel. Then copy the result.
@@ -31,7 +62,21 @@ Follows the Microsoft convention for configuration via environment variables:
 - Invalid JSON shows the parser error in the right panel
 - Line breaks and tabs in values are escaped (`\n`, `\r`, `\t`) to keep one entry per line
 
-## How to run
+## Build from source
+
+### Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install) (edition 2024)
+- System libraries for Slint: `libx11-dev`, `libxkbcommon-dev`, `libwayland-dev`, `libgl-dev`
+- `pkg-config` (for build scripts)
+
+On Debian/Ubuntu:
+
+```bash
+sudo apt install pkg-config libx11-dev libxkbcommon-dev libwayland-dev libgl-dev
+```
+
+### Build and run
 
 ```bash
 cargo run
@@ -47,3 +92,21 @@ cargo test
 
 - **Rust** with [Slint](https://slint.dev) (desktop UI)
 - **serde_json** (parse), **arboard** (clipboard), **rfd** (file picker)
+
+## Troubleshooting
+
+**Slint build fails with "cannot find -lX11"**
+
+Install the X11 development library:
+
+```bash
+sudo apt install libx11-dev
+```
+
+**Clipboard doesn't work on Wayland**
+
+arboard requires the `wl-clipboard` tool on Wayland:
+
+```bash
+sudo apt install wl-clipboard
+```

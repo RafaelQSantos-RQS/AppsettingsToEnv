@@ -2,7 +2,21 @@
 
 Thanks for wanting to contribute! This project is small on purpose — please keep changes minimal and focused.
 
-## Getting started
+## Development environment
+
+### Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install) (edition 2024)
+- System libraries for Slint: `libx11-dev`, `libxkbcommon-dev`, `libwayland-dev`, `libgl-dev`
+- `pkg-config`
+
+On Debian/Ubuntu:
+
+```bash
+sudo apt install pkg-config libx11-dev libxkbcommon-dev libwayland-dev libgl-dev
+```
+
+### Getting started
 
 ```bash
 cargo run    # run the app
@@ -18,6 +32,10 @@ cargo test
 ```
 
 The CI runs exactly these three checks, so a PR that doesn't pass them won't be merged.
+
+## IDE setup
+
+[VS Code](https://code.visualstudio.com/) with the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension is recommended. It provides inline errors, auto-imports, and type hints.
 
 ## Conventions
 
