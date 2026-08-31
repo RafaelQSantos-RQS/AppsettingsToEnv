@@ -1,0 +1,34 @@
+schema: spec-driven
+
+context: |
+  Tech stack: Rust (edition 2024), Slint 1.17.1 (desktop UI framework)
+  Dependencies: serde_json (JSON parsing), arboard (clipboard), rfd (file dialogs)
+  Build: slint-build compiles UI, cargo build/release
+  Packaging: .deb via cargo-deb, AppImage via appimage-bundle
+  Platform: Linux (X11/Wayland), targets Flatpak and .deb
+  Domain: Developer tool — converts .NET appsettings.json to Docker-ready env vars
+  Convention: Single-binary desktop app, no CLI mode, no network
+  UI pattern: Two-pane layout (input JSON | output ENV), fixed 1280x800 window
+  Conversion rules: Microsoft config-provider convention (__ separator, array indexing, null skip, escape \n\r\t)
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
