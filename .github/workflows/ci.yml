@@ -15,10 +15,12 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+          echo "nameserver 1.1.1.1" | sudo tee -a /etc/resolv.conf
           sudo rm -f /etc/apt/apt-mirrors.txt
           cat << 'EOF' | sudo tee /etc/apt/sources.list
-          deb http://us.archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
-          deb http://us.archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+          deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+          deb http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
           deb http://security.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
           EOF
           sudo apt-get update
