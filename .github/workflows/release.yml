@@ -6,15 +6,18 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v7
 
       - name: Install system dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get update
+          echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
+          sudo apt-get -o Acquire::http::Timeout="30" -o Acquire::https::Timeout="30" update
           sudo apt-get install -y libxkbcommon-dev libwayland-dev libx11-dev libgl1-mesa-dev libfontconfig1-dev
 
       - name: Install Rust
@@ -32,8 +35,10 @@ jobs:
         run: cargo deb
 
       - name: Setup appimagetool
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get install -y libfuse2 || sudo apt-get install -y libfuse2t64 || true
+          sudo apt-get install -y libfuse2t64 || sudo apt-get install -y libfuse2 || true
           sudo wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
           sudo chmod +x /usr/local/bin/appimagetool
 
