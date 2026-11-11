@@ -12,13 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Configure Fast APT Mirror
-        uses: vegardit/fast-apt-mirror.sh@v1
-
       - name: Install system dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          sudo rm -f /etc/apt/apt-mirrors.txt
+          cat << 'EOF' | sudo tee /etc/apt/sources.list
+          deb http://us.archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+          deb http://us.archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+          deb http://security.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
+          EOF
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends libxkbcommon-dev libwayland-dev libx11-dev libgl1-mesa-dev libfontconfig1-dev
 
