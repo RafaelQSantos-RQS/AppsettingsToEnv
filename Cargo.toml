@@ -17,7 +17,6 @@ slint-build = "1.17.1"
 [package.metadata.appimage]
 icon = "packaging/appsettingstoenv.png"
 desktop_entry = "packaging/appsettingstoenv.desktop"
-auto_link = true
 
 [package.metadata.deb]
 maintainer = "Rafael Queiroz Santos <rafaelqsantos33@gmail.com>"
