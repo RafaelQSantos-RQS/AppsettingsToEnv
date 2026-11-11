@@ -17,6 +17,7 @@ jobs:
         run: |
           echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
           echo "nameserver 1.1.1.1" | sudo tee -a /etc/resolv.conf
+          echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
           sudo rm -f /etc/apt/apt-mirrors.txt
           cat << 'EOF' | sudo tee /etc/apt/sources.list
           deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
