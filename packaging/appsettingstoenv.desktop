@@ -5,4 +5,5 @@ Comment=Convert appsettings.json to environment variables
 Exec=appsettingstoenv
 Icon=appsettingstoenv
 Terminal=false
-Categories=Development;Utility;
+Categories=Development;
+StartupWMClass=appsettingstoenv

@@ -31,8 +31,26 @@ jobs:
       - name: Build .deb package
         run: cargo deb
 
+      - name: Setup appimagetool
+        run: |
+          sudo apt-get install -y libfuse2 || sudo apt-get install -y libfuse2t64 || true
+          sudo wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+          sudo chmod +x /usr/local/bin/appimagetool
+
+      - name: Install cargo-appimage
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-appimage
+
+      - name: Build AppImage
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: "1"
+        run: cargo appimage
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          files: target/debian/*.deb
+          files: |
+            target/debian/*.deb
+            target/appimage/*.AppImage
           generate_release_notes: true

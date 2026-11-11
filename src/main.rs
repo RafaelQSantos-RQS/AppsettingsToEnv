@@ -82,6 +82,8 @@ mod tests {
 fn main() -> Result<(), slint::PlatformError> {
     let ui = MainWindow::new()?;
 
+    slint::set_xdg_app_id("appsettingstoenv")?;
+
     let handle = ui.as_weak();
     ui.on_input_changed(move |text| {
         let (out, count) = convert(&text);

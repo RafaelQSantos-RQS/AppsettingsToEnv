@@ -1,6 +1,6 @@
 [package]
 name = "appsettingstoenv"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2024"
 description = "Convert appsettings.json to environment variables (KEY=value) for Docker"
 license = "MIT"
@@ -13,6 +13,11 @@ slint = "1.17.1"
 
 [build-dependencies]
 slint-build = "1.17.1"
+
+[package.metadata.appimage]
+icon = "packaging/appsettingstoenv.png"
+desktop_entry = "packaging/appsettingstoenv.desktop"
+auto_link = true
 
 [package.metadata.deb]
 maintainer = "Rafael Queiroz Santos <rafaelqsantos33@gmail.com>"
