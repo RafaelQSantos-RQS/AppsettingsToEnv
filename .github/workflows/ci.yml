@@ -7,7 +7,7 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v7
 
@@ -15,9 +15,10 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list
           echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
-          sudo apt-get -o Acquire::http::Timeout="30" -o Acquire::https::Timeout="30" update
-          sudo apt-get install -y libxkbcommon-dev libwayland-dev libx11-dev libgl1-mesa-dev libfontconfig1-dev appstream
+          sudo apt-get update -o Acquire::http::Timeout="20"
+          sudo apt-get install -y --no-install-recommends libxkbcommon-dev libwayland-dev libx11-dev libgl1-mesa-dev libfontconfig1-dev appstream
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
